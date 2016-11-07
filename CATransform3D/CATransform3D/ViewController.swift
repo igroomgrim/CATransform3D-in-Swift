@@ -15,6 +15,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var dividerLabel: UILabel!
     @IBOutlet weak var degreeLabel: UILabel!
     
+    @IBOutlet weak var anchorXLabel: UILabel!
+    @IBOutlet weak var anchorYLabel: UILabel!
+    
+    
     @IBOutlet weak var axisSegment: UISegmentedControl!
     
     var transform = CATransform3DIdentity
@@ -23,6 +27,8 @@ class ViewController: UIViewController {
     var x: CGFloat = 1
     var y: CGFloat = 0
     var z: CGFloat = 0
+    var anchorPointX = 0.5
+    var anchorPointY = 0.5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,14 +38,14 @@ class ViewController: UIViewController {
 
     @IBAction func dividerChanged(_ sender: UISlider) {
         divider = CGFloat(sender.value)
-        dividerLabel.text = "Divider : \(divider)"
+        dividerLabel.text = String(format: "Divider : %.2f", divider)
         
         imageView.layer.transform = transform3D()
     }
     
     @IBAction func degreeChanged(_ sender: UISlider) {
         degree = Double(sender.value)
-        degreeLabel.text = "Degree : \(degree)"
+        degreeLabel.text = String(format: "Degree : %.2f", degree)
         
         imageView.layer.transform = transform3D()
     }
@@ -68,10 +74,23 @@ class ViewController: UIViewController {
         imageView.layer.transform = transform3D()
     }
     
+    @IBAction func anchorXChanged(_ sender: UISlider) {
+        anchorPointX = Double(sender.value)
+        anchorXLabel.text = String(format: "Anchor point x : %.2f", anchorPointX)
+        imageView.layer.transform = transform3D()
+    }
+    
+    @IBAction func anchorYChanged(_ sender: UISlider) {
+        anchorPointY = Double(sender.value)
+        anchorYLabel.text = String(format: "Anchor point y : %.2f", anchorPointY)
+        imageView.layer.transform = transform3D()
+    }
 }
 
 extension ViewController {
     func transform3D() -> CATransform3D {
+        imageView.layer.anchorPoint = CGPoint(x: anchorPointX, y: anchorPointY)
+        
         transform = CATransform3DIdentity
         transform.m34 = -1.0/divider
         
